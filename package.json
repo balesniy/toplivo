@@ -1,8 +1,11 @@
 {
   "name": "application-name",
   "version": "0.0.1",
+  "engines": {
+    "node": "7.3.0"
+  },
   "scripts": {
-    "start": "node index.js"
+    "start": "node --harmony index.js"
   },
   "dependencies": {
     "cheerio": "^0.22.0",
