@@ -20,7 +20,6 @@ middlewares.forEach(function (middleware) {
 
 // ---------------------------------------
 
-// can be split into files too
 
 const router = new Router();
 router.get('/', frontpage);
@@ -42,4 +41,6 @@ app.use(function (ctx, next) {
   }
 });
 
-app.listen(80);
+app.listen(process.env.PORT || 3000, function () {
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
