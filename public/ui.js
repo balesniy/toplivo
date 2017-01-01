@@ -6,7 +6,7 @@
     content = document.getElementById('main');
 
   function toggleClass(element, className) {
-    const classes = element.className.split(/\s+/),
+    let classes = element.className.split(/\s+/),
       length = classes.length,
       i = 0;
 
