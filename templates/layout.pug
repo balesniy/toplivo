@@ -1,0 +1,38 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        meta(name='description', content='A layout example with a side menu that hides on mobile, just like the Pure website.')
+        title Responsive Side Menu – Layout Examples – Pure
+        link(rel='stylesheet', href='pure-min.css')
+        link(rel='stylesheet', href='side-menu.css')
+        script(src="lock.min.js")
+    body
+        #layout
+            // Menu toggle
+            a#menuLink.menu-link(href='#menu')
+                // Hamburger icon
+                span
+            #menu
+                .pure-menu
+                    a.pure-menu-heading(href='#') Company
+                    ul.pure-menu-list
+                        li.pure-menu-item
+                            a.pure-menu-link(href='#') Home
+                        li.pure-menu-item
+                            a.pure-menu-link(href='#') About
+                        li.pure-menu-item
+                            a.pure-menu-link(href='#') Services
+                        li.pure-menu-item
+                            a.pure-menu-link(href='/balances') Остатки на картах
+                        li.pure-menu-item
+                            a.pure-menu-link(href='/contact') Contact
+            #main
+                .header
+                    h1 Page Title
+                    h2 A subtitle for your page goes here
+                .content
+                    h2.content-subhead How to use this layout
+                    block content
+        script(src='ui.js')

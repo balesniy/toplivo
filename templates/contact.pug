@@ -1,0 +1,12 @@
+extends layout
+
+block content
+
+    p You are logged in.
+    img(src=user.picture)
+    h2 Welcome #{user.nickname}!
+    br
+
+    form(action="/logout" method="post")
+        button.pure-button(type="submit") Logout
+

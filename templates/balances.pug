@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h2 Остатки на картах
+    ul
+    each type, index in goodsAmounts
+        li #{index} = #{type}
+
+
+    form(action="/logout" method="post")
+        button.pure-button(type="submit") Logout
