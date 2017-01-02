@@ -3,14 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const config = require('config');
 require('./libs/passport');
-const Router = require('koa-router');
-const frontpage = require('./routes/frontpage');
-const callback = require('./routes/callback');
-const logout = require('./routes/logout');
-const user = require('./routes/user');
-const balances = require('./routes/balances');
+require('./libs/mongoose');
+const router = require('koa-router')();
 const app = new Koa();
 app.keys = [config.secret];
+app.proxy = true;
 
 const middlewares = fs.readdirSync(path.join(__dirname, 'middlewares')).sort();
 
@@ -20,16 +17,16 @@ middlewares.forEach(function (middleware) {
 
 // ---------------------------------------
 
+router.get('/', require('./routes/frontpage'));
+router.get('/user', require('./routes/user'));
+router.post('/logout', require('./routes/logout'));
+router.get('/contact', require('./routes/balances'));
+router.get('/payment', require('./routes/payment'));
+router.post('/login', require('./routes/login'));
+router.post('/register', require('./routes/register').post);
+router.get('/register', require('./routes/register').get);
 
-const router = new Router();
-router.get('/', frontpage);
-
-// Perform the final stage of authentication and redirect to '/user'
-router.get('/callback', callback);
-router.get('/user', user);
-router.post('/logout', logout);
-router.get('/contact', balances);
-app.use(router.routes());
+app.use(router.routes()).use(router.allowedMethods());
 
 // Require authentication for now
 app.use(function (ctx, next) {

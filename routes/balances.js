@@ -6,7 +6,7 @@ module.exports = async function (ctx) {
     resolveWithFullResponse: true,
   };
   const login = await request(getOptions);
-  const session = login.headers['set-cookie'][0].split(';')[0];
+  const [session] = login.headers['set-cookie'][0].split(';');
   let $ = cheerio.load(login.body);
   const postOptions = {
     method:                  'POST',
@@ -25,7 +25,7 @@ module.exports = async function (ctx) {
   };
 
   const change = await request(postOptions);
-  const newSession = change.headers['set-cookie'][0].split(';')[0];
+  const [newSession] = change.headers['set-cookie'][0].split(';');
   await request({
     uri:     'http://79.142.89.195:22763/pws/changeSID.do',
     headers: {

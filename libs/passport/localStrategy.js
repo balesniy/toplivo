@@ -1,13 +1,20 @@
-const Auth0Strategy = require('passport-auth0');
+let LocalStrategy = require('passport-local');
+let User = require('../../models/user');
 
-module.exports = new Auth0Strategy({
-  domain:       'balesniy.eu.auth0.com',
-  clientID:     'DuFCvvnVdQU2dd2hJeA7JDEMykCT3tib',
-  clientSecret: 'ebwCCzLPkqGvIvNXTo4wMxnJD-I7Ya3XP5RV0REBi0wRqyM2QsqGmb6yUM9VICDx',
-  callbackURL:  'https://secret-tundra-34211.herokuapp.com/callback'
-}, function (accessToken, refreshToken, extraParams, profile, done) {
-  // accessToken is the token to call Auth0 API (not needed in the most cases)
-  // extraParams.id_token has the JSON Web Token
-  // profile has all the information from the user
-  return done(null, profile);
-});
+// Стратегия берёт поля из req.body
+// Вызывает для них функцию
+module.exports = new LocalStrategy(
+  function (username, password, done) {
+    User.findOne({ number: username }, function (err, user) {
+      if (err) {
+        return done(err);
+      }
+
+      if (!user || !user.checkPassword(password)) {
+        // don't say whether the user exists
+        return done(null, false, { message: 'Нет такого пользователя или пароль неверен.' });
+      }
+      return done(null, user);
+    });
+  }
+);

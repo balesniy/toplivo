@@ -7,7 +7,6 @@ html
         title Responsive Side Menu – Layout Examples – Pure
         link(rel='stylesheet', href='/pure-min.css')
         link(rel='stylesheet', href='/side-menu.css')
-        script(src="/lock.min.js")
     body
         #layout
             // Menu toggle
@@ -27,6 +26,8 @@ html
                         li.pure-menu-item
                             a.pure-menu-link(href='/balances') Остатки на картах
                         li.pure-menu-item
+                            a.pure-menu-link(href='/payment') Оплата
+                        li.pure-menu-item
                             a.pure-menu-link(href='/contact') Contact
             #main
                 .header
@@ -34,5 +35,6 @@ html
                     h2 A subtitle for your page goes here
                 .content
                     h2.content-subhead How to use this layout
+                    include messages
                     block content
         script(src='ui.js')

@@ -2,21 +2,16 @@ extends layout
 
 block content
 
-    div(id="root" style="width: 280px; margin: 40px auto; padding: 10px;")
+  form.pure-form(action="/login" method="post")
+    h1 Please sign in
 
-    script.
-      // Construct an instance of Auth0Lock with your clientId and aut0 domain name
-      var lock = new Auth0Lock('DuFCvvnVdQU2dd2hJeA7JDEMykCT3tib', 'balesniy.eu.auth0.com', {
-        auth: {
-          redirectUrl:  'https://secret-tundra-34211.herokuapp.com/callback'
-          ,
-          responseType: 'code'
-          ,
-          params:       {
-            scope: 'openid name email picture'
-          }
-        }
-      });
+    .form-group
+      label(for="username") number
+      input(type="text" id="username" name="username" placeholder="533 025 853" required autofocus)
+    .form-group
+      label(for="password") Password
+      input(type="password" id="password" name="password" required)
 
-      // Show lock's login widget
-      lock.show();
+    button.pure-button.pure-button-primary(type="submit") Login
+    p
+      a(href="/register") or register
