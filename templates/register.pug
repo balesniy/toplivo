@@ -1,0 +1,15 @@
+extends layout
+
+block content
+
+    form.pure-form(action="/register" method="post")
+        h1 Please register
+
+        .form-group
+            label(for="number") number
+            input.form-control(type="text" id="number" name="number" placeholder="533025853" required autofocus)
+        .form-group
+            label(for="password") Password
+            input.form-control(type="password" id="password" name="password" required)
+
+        button.pure-button.pure-button-primary(type="submit") Register

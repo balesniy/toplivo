@@ -3,8 +3,7 @@ extends layout
 block content
 
     p You are logged in.
-    img(src=user.picture)
-    h2 Welcome #{user.nickname}!
+    h2 Welcome #{user.number}!
     br
 
     form(action="/logout" method="post")
