@@ -7,8 +7,8 @@ module.exports = function (ctx, next) {
       ctx.throw(401)
     }
     else {
+      ctx.login(user);
       ctx.body = ctx.render('welcome');
-      return ctx.login(user)
     }
   })(ctx, next)
 };
