@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h2 Остаток на карте
+    h3 #{user.number}
+    ul
+    each good in goodsAmounts
+        li #{good.good} = #{good.amount}
+
+
+    form(action="/logout" method="post")
+        button.pure-button(type="submit") Logout

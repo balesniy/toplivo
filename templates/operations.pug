@@ -1,0 +1,124 @@
+extends layout
+
+block content
+    h2 Операции по карте
+    h3 #{user.number}
+    link(rel='stylesheet', href='/jquery-ui.css')
+    link(rel='stylesheet', href='/jquery-ui.theme.css')
+    script(src='https://api-maps.yandex.ru/2.1/?lang=ru_RU', type='text/javascript')
+    script(src='https://code.jquery.com/jquery-1.12.4.js', type='text/javascript')
+    script(src='/jquery-ui.js', type='text/javascript')
+    form.pure-form(action="/operations" method="post")
+        label(for='from') From
+        input#from(type='text', name='from')
+        label(for='to') to
+        input#to(type='text', name='to')
+        button.pure-button(type="submit") Refresh
+    script.
+      $(function () {
+        let dateFormat = "mm/dd/yy",
+          from = $("#from")
+            .datepicker({
+              defaultDate:    "+1w",
+              changeMonth:    true,
+              numberOfMonths: 3,
+              dateFormat: "d/m/yy"
+            })
+            .on("change", function () {
+              to.datepicker("option", "minDate", getDate(this));
+            }),
+          to = $("#to").datepicker({
+              defaultDate:    "+1w",
+              changeMonth:    true,
+              numberOfMonths: 3,
+              dateFormat: "d/m/yy"
+            })
+            .on("change", function () {
+              from.datepicker("option", "maxDate", getDate(this));
+            });
+
+        function getDate(element) {
+          let date;
+          try {
+            date = $.datepicker.parseDate(dateFormat, element.value);
+          } catch (error) {
+            date = null;
+          }
+          return date;
+        }
+      });
+
+
+    #map(style='width: 600px; height: 400px')
+    table.pure-table
+        thead
+            tr
+                td место
+                td адрес
+                td дата
+                td топливо
+                td кол-во
+                td цена
+        tbody
+            each row in table
+                tr
+                    each data in row
+                        td #{data}
+            else
+                div There are no values
+    script(type='text/javascript').
+      ymaps.ready(init);
+      const tableData = $('tr').slice(1).get().map(function (el) {
+        return $(el).children().map(function () {return $(this).text()}).get()
+      });
+      function init() {
+        const myMap = new ymaps.Map("map", {
+          center: [59.94, 30.32],
+          zoom:   9
+        });
+        if(!tableData.length) return;
+        Promise.all(tableData.map(function ([,data]) {
+          return ymaps.geocode(data, { results: 1 })
+        })).then(function (res) {
+          const points = res.map(function ({ geoObjects, metaData }, i) {
+            const obj = geoObjects.get(0);
+            obj && obj.properties.set({
+              // Устаналиваем данные, которые будут отображаться в балуне.
+              balloonContentHeader: tableData[i][2],
+              balloonContentBody:   metaData.geocoder.request,
+              balloonContentFooter: tableData[i][0]
+            });
+            return obj
+          }).filter(function (i) {
+            return !!i
+          });
+          const customItemContentLayout = ymaps.templateLayoutFactory.createClass(
+            // Флаг "raw" означает, что данные вставляют "как есть" без экранирования html.
+            '<h2 class=ballon_header>{{ properties.balloonContentHeader|raw }}</h2>' +
+            '<div class=ballon_body>{{ properties.balloonContentBody|raw }}</div>' +
+            '<div class=ballon_footer>{{ properties.balloonContentFooter|raw }}</div>'
+          );
+          const clusterer = new ymaps.Clusterer({
+            clusterDisableClickZoom:          true,
+            clusterOpenBalloonOnClick:        true,
+            // Устанавливаем режим открытия балуна.
+            // В данном примере балун никогда не будет открываться в режиме панели.
+            clusterBalloonPanelMaxMapArea:    0,
+            // Устанавливаем размер макета контента балуна (в пикселях).
+            clusterBalloonContentLayoutWidth: 350,
+            // Устанавливаем собственный макет.
+            clusterBalloonItemContentLayout:  customItemContentLayout,
+            // Устанавливаем ширину левой колонки, в которой располагается список всех геообъектов кластера.
+            clusterBalloonLeftColumnWidth:    150
+          });
+          clusterer.add(points);
+          myMap.geoObjects.add(clusterer);
+          myMap.setBounds(clusterer.getBounds(), {
+            checkZoomRange: true
+          });
+        })
+      }
+
+
+    form(action="/logout" method="post")
+        button.pure-button(type="submit") Logout
