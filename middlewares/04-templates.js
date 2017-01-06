@@ -11,7 +11,7 @@ module.exports = async function (ctx, next) {
   ctx.locals = {
     /* at the time of this middleware, user is unknown, so we make it a getter */
     get user() {
-      return ctx.req.user; // passport sets this
+      return ctx.state.user; // passport sets this
     },
 
     get flash() {
