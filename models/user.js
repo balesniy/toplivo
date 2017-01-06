@@ -16,6 +16,23 @@ const userSchema = new mongoose.Schema({
       }
     ]
   },
+  email:         {
+    type:     String,
+    unique:   "Такой email уже есть, если это вы, то войдите.",
+    required: "E-mail пользователя не должен быть пустым.",
+    validate: [
+      {
+        validator: function checkEmail(value) {
+          return this.deleted ? true : /^[-.\w]+@([\w-]+\.)+[\w-]{2,12}$/.test(value);
+        },
+        msg:       'Укажите, пожалуйста, корректный email.'
+      }
+    ]
+  },
+  verifyEmailToken: String,
+  // pendingVerifyEmail: String,
+  verifiedEmailsHistory: [{date: Date, email: String}],
+  verifiedEmail: Boolean,
   deleted:      Boolean,
   passwordHash: { // md5(salt + password)
     type:     String,
@@ -28,6 +45,13 @@ const userSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+
+userSchema.methods.getPublicFields = function() {
+  return {
+    number: this.number,
+    email: this.email
+  }
+};
 
 userSchema.virtual('password')
   .set(function (password) {

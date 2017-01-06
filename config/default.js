@@ -6,6 +6,9 @@ module.exports = {
   // secret data can be moved to env variables
   // or a separate config
   secret:   'mysecret',
+  server: {
+    siteHost: 'http://localhost:3000'
+  },
   mongoose: {
     uri:     'mongodb://balesniy:balesniy123@ds151208.mlab.com:51208/heroku_b5pkdnsv',
     options: {
@@ -14,6 +17,27 @@ module.exports = {
           keepAlive: 1
         },
         poolSize:      5
+      }
+    }
+  },
+  mailer: {
+    transport: 'gmail',
+    gmail: {
+      user: 'alex.balesniy',
+      password: 'sokolova123'
+    },
+    senders:  {
+      // transactional emails, register/forgot pass etc
+      default:  {
+        fromEmail: 'alex.balesniy@gmail.com',
+        fromName:  'toplivo.club',
+        signature: "<em>С уважением,<br>Топливный клуб</em>"
+      },
+      // newsletters
+      informer: {
+        fromEmail: 'someother@email.com',
+        fromName:  'Newsletters',
+        signature: "<em>Have fun!</em>"
       }
     }
   },

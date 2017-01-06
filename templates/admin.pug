@@ -1,0 +1,16 @@
+extends layout
+
+block content
+
+    p You are logged in.
+
+    h2 Welcome #{user.number}!
+    br
+    h1 Админка
+
+    ul
+        each user in users
+            li #{user.number}
+
+    form(action="/logout" method="post")
+        button.pure-button(type="submit") Logout

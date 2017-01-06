@@ -10,6 +10,7 @@
   "dependencies": {
     "cheerio": "^0.22.0",
     "config": "^1.24.0",
+    "juice": "^4.0.2",
     "koa": "^2.0.0-alpha.7",
     "koa-bodyparser": "^3.2.0",
     "koa-convert": "latest",
@@ -22,10 +23,13 @@
     "koa-static": "^3.0.0",
     "mongoose": "latest",
     "mongoose-beautiful-unique-validation": "^5.1.1",
+    "nodemailer": "^2.7.0",
+    "nodemailer-html-to-text": "^2.1.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-beta6",
     "request": "^2.78.0",
-    "request-promise-native": "^1.0.3"
+    "request-promise-native": "^1.0.3",
+    "nodemailer-smtp-transport": "latest"
   }
 }

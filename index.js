@@ -28,6 +28,8 @@ router.get('/payment', require('./routes/payment'));
 router.post('/login', require('./routes/login'));
 router.post('/register', require('./routes/register').post);
 router.get('/register', require('./routes/register').get);
+router.get('/verify-email/:verifyEmailToken', require('./routes/verifyEmail').get);
+router.get('/admin', require('./routes/admin'));
 
 app.use(router.routes()).use(router.allowedMethods());
 
