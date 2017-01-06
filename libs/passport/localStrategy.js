@@ -7,7 +7,6 @@ module.exports = new LocalStrategy(
       if (err) {
         return done(err);
       }
-      console.log('strategy', user)
       if (!user || !user.checkPassword(password)) {
         // don't say whether the user exists
         return done(null, false, { message: 'Нет такого пользователя или пароль неверен.' });
