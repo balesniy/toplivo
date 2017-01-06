@@ -1,5 +1,5 @@
 const User = require('../models/user');
-module.exports = async function (ctx) {
+exports.get = async function (ctx) {
   if (ctx.isAuthenticated()) {
     const users = await User.find({});
     ctx.body = ctx.render('admin', {
@@ -9,4 +9,8 @@ module.exports = async function (ctx) {
   else {
     ctx.body = ctx.render('login');
   }
+};
+
+exports.del = async function (ctx) {
+  ctx.body = await User.findByIdAndRemove(ctx.params.id);
 };

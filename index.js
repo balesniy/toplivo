@@ -24,12 +24,15 @@ router.get('/contact', require('./routes/balances'));
 router.get('/balance', require('./routes/balance'));
 router.get('/operations', require('./routes/operations'));
 router.post('/operations', require('./routes/operations'));
-router.get('/payment', require('./routes/payment'));
+router.get('/payment', require('./routes/payment').get);
+router.post('/payment', require('./routes/payment').post);
 router.post('/login', require('./routes/login'));
+router.post('/yandex', require('./routes/yandex'));
 router.post('/register', require('./routes/register').post);
 router.get('/register', require('./routes/register').get);
 router.get('/verify-email/:verifyEmailToken', require('./routes/verifyEmail').get);
-router.get('/admin', require('./routes/admin'));
+router.get('/admin', require('./routes/admin').get);
+router.del('/admin/:id', require('./routes/admin').del);
 
 app.use(router.routes()).use(router.allowedMethods());
 

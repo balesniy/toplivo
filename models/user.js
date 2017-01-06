@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const config = require('config');
 
+
 const userSchema = new mongoose.Schema({
-  number:       {
+  number:                {
     type:     Number,
     unique:   "Такой номер уже есть, если это вы, то войдите.",
     required: "Требуется номер карты",
@@ -16,7 +17,8 @@ const userSchema = new mongoose.Schema({
       }
     ]
   },
-  email:         {
+  goods:                 [String],
+  email:                 {
     type:     String,
     unique:   "Такой email уже есть, если это вы, то войдите.",
     required: "E-mail пользователя не должен быть пустым.",
@@ -29,16 +31,20 @@ const userSchema = new mongoose.Schema({
       }
     ]
   },
-  verifyEmailToken: String,
-  // pendingVerifyEmail: String,
-  verifiedEmailsHistory: [{date: Date, email: String}],
-  verifiedEmail: Boolean,
-  deleted:      Boolean,
-  passwordHash: { // md5(salt + password)
+  verifyEmailToken:      String,
+  verifiedEmailsHistory: [
+    {
+      date:  Date,
+      email: String
+    }
+  ],
+  verifiedEmail:         Boolean,
+  deleted:               Boolean,
+  passwordHash:          { // md5(salt + password)
     type:     String,
     required: true
   },
-  salt:         { // abc2e4vcdcdsc12345
+  salt:                  { // abc2e4vcdcdsc12345
     required: true,
     type:     String
   }
@@ -46,10 +52,12 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-userSchema.methods.getPublicFields = function() {
+userSchema.methods.getPublicFields = function () {
   return {
     number: this.number,
-    email: this.email
+    email:  this.email,
+    id:     this._id,
+    goods:  this.goods
   }
 };
 
@@ -91,5 +99,7 @@ userSchema.methods.checkPassword = function (password) {
 
   return crypto.pbkdf2Sync(password, this.salt, config.crypto.hash.iterations, config.crypto.hash.length, 'sha1') == this.passwordHash;
 };
+
+
 
 module.exports = mongoose.model('User', userSchema);

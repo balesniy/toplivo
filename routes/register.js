@@ -42,6 +42,6 @@ exports.post = async function (ctx) {
     link: config.server.siteHost + '/verify-email/' + verifyEmailToken
   });
 
-  ctx.body = 'Вы зарегистрированы.';
+  ctx.body = 'Проверьте почту';
 
 };

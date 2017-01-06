@@ -10,7 +10,12 @@ block content
 
     ul
         each user in users
-            li #{user.number}
+            li #{user.number} #{user.goods}
+               button.pure-button.pure-button-primary(data-id=user.id onClick='removeUser(this.dataset.id)') Delete
 
     form(action="/logout" method="post")
         button.pure-button(type="submit") Logout
+    script.
+        function removeUser(id){
+          fetch(`/admin/${id}`, {method:'delete'})
+        }

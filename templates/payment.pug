@@ -1,7 +1,46 @@
 extends layout
 
 block content
-
-    iframe(frameborder='0', allowtransparency='true', scrolling='no', src='https://money.yandex.ru/quickpay/shop-widget?account=410013676054616&quickpay=shop&payment-type-choice=on&mobile-payment-type-choice=on&writer=seller&targets=%D1%82%D0%BE%D0%BF%D0%BB%D0%B8%D0%B2%D0%BE&targets-hint=&default-sum=500&button-text=01&successURL=', width='450', height='198')
+    form#payment.pure-form.pure-form-stacked(method='POST', action='https://money.yandex.ru/quickpay/confirm.xml')
+        input(type='hidden', name='receiver', value='410013676054616')
+        input(type='hidden', name='formcomment', value='Проект «Железный человек»: реактор холодного ядерного синтеза')
+        input(type='hidden', name='short-dest', value='Проект «Железный человек»: реактор холодного ядерного синтеза')
+        input(type='hidden', name='label', value=user.number)
+        input(type='hidden', name='quickpay-form', value='shop')
+        label Сумма к оплате
+            input(type='number', name='sum', value='500', data-type='number')
+        label Вид топлива
+            select.pure-input-1-2(name='targets')
+                each good in user.goods
+                    option #{good}
+        label.pure-radio
+            input(type='radio', name='paymentType', value='PC')
+            | Яндекс.Деньгами
+        label.pure-radio
+            input(type='radio', name='paymentType', value='AC', checked)
+            | Банковской картой
+        input.pure-button.pure-button-primary(type='submit', value='Перевести')
     form(action="/logout" method="post")
         button.pure-button(type="submit") Logout
+    script.
+        document.querySelector('#payment').onsubmit = onSubmit;
+        function onSubmit(e){
+          e.preventDefault();
+          const form = this
+          fetch('/payment', {
+            method:  'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body:    JSON.stringify({
+              user:  '#{user.id}',
+              good: this.targets.value,
+              sum: this.sum.value
+            })
+          }).then(function(res){return res.json()}).then(function({id}){
+            form.label.value = id;
+            console.log(id)
+            form.submit();
+          })
+
+        }
